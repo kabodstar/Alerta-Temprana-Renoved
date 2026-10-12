@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AlertaTemprana.Historialpage"
+             BackgroundColor="{StaticResource PageBackground}">
+
+    <Grid RowDefinitions="Auto, Auto, *">
+
+        <!-- ===================== ENCABEZADO ===================== -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="20,20,20,0">
+
+            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                <Label Text="Historial"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource TextDarkNavy}" />
+                <Label Text="Registro de niveles y alertas"
+                       FontSize="15"
+                       TextColor="{StaticResource TextGray}" />
+            </VerticalStackLayout>
+
+            <HorizontalStackLayout Grid.Column="1" Spacing="10" VerticalOptions="Center">
+                <ImageButton 
+                    Source="calendario.png"
+                            x:Name="BtnCalendario"
+                             WidthRequest="24"
+                             HeightRequest="24"
+                             BackgroundColor="Transparent"
+                             Clicked="OnCalendarioClicked">
+                    <!-- Incluir aquí el recurso visual correspondiente (ícono de calendario). -->
+                </ImageButton>
+
+                <Label Text="Filtrar"
+                       FontSize="16"
+                       TextColor="{StaticResource AccentBlue}"
+                       VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnFiltrarTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <ImageButton 
+                    Source="borra.png"
+                    x:Name="BtnBorrarHistorial"
+                             WidthRequest="22"
+                             HeightRequest="22"
+                             BackgroundColor="Transparent"
+                             Clicked="OnBorrarHistorialClicked">
+                    <!-- Incluir aquí el recurso visual correspondiente (ícono de basurero/borrar). -->
+                </ImageButton>
+            </HorizontalStackLayout>
+
+        </Grid>
+
+        <!-- ===================== FILTROS (visual, sin lógica todavía) ===================== -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*" ColumnSpacing="12" Padding="20,16,20,0">
+
+            <Border Grid.Column="0"
+                    Stroke="{StaticResource SeparatorGray}"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="{StaticResource CardBackground}"
+                    Padding="14,10">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnFiltroRangoTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                    <Image 
+                        Source="calendarionegro.png"
+                        Grid.Column="0" WidthRequest="18" HeightRequest="18">
+                        <!-- Incluir aquí el recurso visual correspondiente (ícono de calendario). -->
+                    </Image>
+                    <Label
+                        x:Name="LblFiltroRango"
+                        Grid.Column="1"
+                           Text="Últimas 24 horas"
+                           FontSize="14"
+                           TextColor="{StaticResource TextDarkNavy}"
+                           VerticalOptions="Center" />
+                    <Image 
+                        Source="flecha.png"
+                        Grid.Column="2" WidthRequest="12" HeightRequest="12">
+                        <!-- Incluir aquí el recurso visual correspondiente (flecha hacia abajo). -->
+                    </Image>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Stroke="{StaticResource SeparatorGray}"
+                    StrokeShape="RoundRectangle 14"
+                    BackgroundColor="{StaticResource CardBackground}"
+                    Padding="14,10">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnFiltroEventosTapped" />
+                </Border.GestureRecognizers>
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                    <Image
+                        Source="lista.png"
+                        Grid.Column="0" WidthRequest="18" HeightRequest="18">
+                        <!-- Incluir aquí el recurso visual correspondiente (ícono de lista). -->
+                    </Image>
+                    <Label
+                            x:Name="LblFiltroEventos"
+                            Grid.Column="1"
+                           Text="Todos los eventos"
+                           FontSize="14"
+                           TextColor="{StaticResource TextDarkNavy}"
+                           VerticalOptions="Center" />
+                    <Image 
+                        Source="flecha.png"
+                        Grid.Column="2" WidthRequest="12" HeightRequest="12">
+                        <!-- Incluir aquí el recurso visual correspondiente (flecha hacia abajo). -->
+                    </Image>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!-- ===================== LISTA DE HISTORIAL ===================== -->
+        <CollectionView x:Name="CvHistorial"
+                         Grid.Row="2"
+                         Margin="20,16,20,20">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center"
+                                     HorizontalOptions="Center"
+                                     Padding="0,60,0,0">
+                    <Label Text="Aún no hay registros en el historial"
+                           FontSize="15"
+                           TextColor="{StaticResource TextGray}"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="16" />
+            </CollectionView.ItemsLayout>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="{StaticResource CardBackground}"
+                            Padding="16"
+                            StrokeShape="RoundRectangle 18"
+                            Stroke="Transparent">
+
+                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+
+                            <!-- Marcador de color + línea vertical -->
+                            <Grid Grid.Column="0" WidthRequest="14">
+                                <BoxView WidthRequest="2"
+                                         Color="{StaticResource SeparatorGray}"
+                                         VerticalOptions="Fill"
+                                         HorizontalOptions="Center" />
+                                <Ellipse Fill="{Binding EstadoBrush}"
+                                         WidthRequest="14"
+                                         HeightRequest="14"
+                                         VerticalOptions="Start"
+                                         HorizontalOptions="Center" />
+                            </Grid>
+
+                            <!-- Número, estado y fecha -->
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                                <HorizontalStackLayout Spacing="4">
+                                    <Label Text="{Binding NivelTexto}"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="{StaticResource TextDarkNavy}" />
+                                    <Label Text="m"
+                                           FontSize="16"
+                                           TextColor="{StaticResource TextDarkNavy}"
+                                           VerticalOptions="End"
+                                           Margin="0,0,0,3" />
+                                </HorizontalStackLayout>
+                                <Label Text="{Binding EstadoTexto}"
+                                       FontSize="15"
+                                       FontAttributes="Bold"
+                                       TextColor="{Binding EstadoColor}" />
+                                <Label Text="{Binding FechaTexto}"
+                                       FontSize="12"
+                                       TextColor="{StaticResource TextGray}" />
+                            </VerticalStackLayout>
+
+                            <!-- Mini gauge -->
+                            <HorizontalStackLayout Grid.Column="2" Spacing="8">
+                                <Grid WidthRequest="60" HeightRequest="110">
+                                    <BoxView Color="{StaticResource WaterFillBlue}"
+                                             HeightRequest="{Binding AlturaBarraMini}"
+                                             VerticalOptions="End"
+                                             HorizontalOptions="Fill" />
+                                </Grid>
+                                <Grid RowDefinitions="*,*,*" HeightRequest="110" WidthRequest="55">
+                                    <HorizontalStackLayout Grid.Row="0" Spacing="4" VerticalOptions="Start">
+                                        <BoxView WidthRequest="8" HeightRequest="1" Color="{StaticResource TextGray}" />
+                                        <Label Text="2.00 m" FontSize="11" TextColor="{StaticResource TextGray}" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="1" Spacing="4" VerticalOptions="Center">
+                                        <BoxView WidthRequest="8" HeightRequest="1" Color="{StaticResource TextGray}" />
+                                        <Label Text="1.00 m" FontSize="11" TextColor="{StaticResource TextGray}" />
+                                    </HorizontalStackLayout>
+                                    <HorizontalStackLayout Grid.Row="2" Spacing="4" VerticalOptions="End">
+                                        <BoxView WidthRequest="8" HeightRequest="1" Color="{StaticResource TextGray}" />
+                                        <Label Text="0.00 m" FontSize="11" TextColor="{StaticResource TextGray}" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </HorizontalStackLayout>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+    </Grid>
+
+</ContentPage>

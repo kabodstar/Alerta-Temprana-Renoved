@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AlertaTemprana.MainPage"
+             BackgroundColor="{StaticResource PageBackground}">
+
+	<ScrollView>
+		<VerticalStackLayout Padding="20" Spacing="20">
+
+			<!-- ===================== ENCABEZADO ===================== -->
+			<Grid ColumnDefinitions="Auto, *, Auto"
+                  ColumnSpacing="12"
+                  Padding="0,0,0,16">
+
+
+                <Image Source="soltar.png"
+                      x:Name="ImgDropletIcon"
+                       Grid.Column="0"
+                       WidthRequest="36"
+                       HeightRequest="36"
+                       VerticalOptions="Center">
+					<!-- Incluir aquí el recurso visual correspondiente (ícono de gota de agua). -->
+				</Image>
+
+				<VerticalStackLayout Grid.Column="1"
+                                     VerticalOptions="Center"
+                                     Spacing="2">
+					<Label Text="Alerta Temprana"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource TextDarkNavy}" />
+					<Label Text="Inundaciones"
+                           FontSize="15"
+                           TextColor="{StaticResource AccentBlue}" />
+				</VerticalStackLayout>
+
+				<!--<ImageButton 
+                             Source="menu.png" 
+                             x:Name="BtnMenu"
+                             Grid.Column="2"
+                             WidthRequest="28"
+                             HeightRequest="28"
+                             VerticalOptions="Center"
+                             BackgroundColor="Transparent"
+                             Clicked="OnMenuButtonClicked">
+					--><!-- Incluir aquí el recurso visual correspondiente (ícono de menú de tres puntos). --><!--
+				</ImageButton>-->
+			</Grid>
+
+			<BoxView HeightRequest="1"
+                     Color="{StaticResource SeparatorGray}"
+                     Margin="0,0,0,4" />
+            <Grid x:Name="GridEstadoBluetooth"
+      ColumnDefinitions="*, Auto"
+      ColumnSpacing="10"
+      Padding="0,0,0,4">
+
+                <Label x:Name="LblEstadoConexion"
+           Grid.Column="0"
+           Text="Bluetooth: desconectado"
+           FontSize="13"
+           TextColor="{StaticResource TextGray}"
+           VerticalOptions="Center" />
+
+                <Button x:Name="BtnConectar"
+            Grid.Column="1"
+            Text="Conectar HC-05"
+            FontSize="13"
+            Padding="14,6"
+            CornerRadius="10"
+            BackgroundColor="{StaticResource AccentBlue}"
+            TextColor="White"
+            Clicked="OnConectarClicked" />
+
+            </Grid>
+
+            <!-- ===================== TARJETA: NIVEL DEL AGUA ACTUAL ===================== -->
+			<Border BackgroundColor="{StaticResource CardBackground}"
+                    Padding="20"
+                    StrokeShape="RoundRectangle 20"
+                    Stroke="Transparent">
+
+				<VerticalStackLayout Spacing="16">
+
+					<Label Text="NIVEL DEL AGUA ACTUAL"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           CharacterSpacing="1"
+                           TextColor="{StaticResource TextGray}" />
+
+					<Grid ColumnDefinitions="*, Auto" ColumnSpacing="20">
+
+						<VerticalStackLayout Grid.Column="0"
+                                             VerticalOptions="Center"
+                                             Spacing="8">
+							<HorizontalStackLayout Spacing="6" VerticalOptions="End">
+								<Label x:Name="LblNivelAguaValor"
+                                       Text="1.25"
+                                       FontSize="40"
+                                       FontAttributes="Bold"
+                                       TextColor="{StaticResource TextDarkNavy}" />
+								<Label Text="m"
+                                       FontSize="18"
+                                       TextColor="{StaticResource TextDarkNavy}"
+                                       VerticalOptions="End"
+                                       Margin="0,0,0,6" />
+							</HorizontalStackLayout>
+							<Label Text="Medido desde el sensor"
+                                   FontSize="14"
+                                   TextColor="{StaticResource TextGray}" />
+						</VerticalStackLayout>
+
+						<HorizontalStackLayout Grid.Column="1" Spacing="10">
+
+							<!-- Indicador de nivel de agua: BoxView que "sube" según el nivel -->
+							<Grid WidthRequest="110" HeightRequest="200">
+								<BoxView x:Name="BoxViewNivelAgua"
+                                         Color="{StaticResource WaterFillBlue}"
+                                         HeightRequest="125"
+                                         VerticalOptions="End"
+                                         HorizontalOptions="Fill" />
+							</Grid>
+
+							<!-- Regla de referencia (0.00 m a 2.00 m) -->
+							<Grid RowDefinitions="*,*,*,*,*" HeightRequest="200" WidthRequest="70">
+								<HorizontalStackLayout Grid.Row="0" Spacing="6" VerticalOptions="Start">
+									<BoxView WidthRequest="10" HeightRequest="1" Color="{StaticResource TextGray}" />
+									<Label Text="2.00 m" FontSize="13" TextColor="{StaticResource TextGray}" />
+								</HorizontalStackLayout>
+								<HorizontalStackLayout Grid.Row="1" Spacing="6" VerticalOptions="Center">
+									<BoxView WidthRequest="10" HeightRequest="1" Color="{StaticResource TextGray}" />
+									<Label Text="1.50 m" FontSize="13" TextColor="{StaticResource TextGray}" />
+								</HorizontalStackLayout>
+								<HorizontalStackLayout Grid.Row="2" Spacing="6" VerticalOptions="Center">
+									<BoxView WidthRequest="10" HeightRequest="1" Color="{StaticResource TextGray}" />
+									<Label Text="1.00 m" FontSize="13" TextColor="{StaticResource TextGray}" />
+								</HorizontalStackLayout>
+								<HorizontalStackLayout Grid.Row="3" Spacing="6" VerticalOptions="Center">
+									<BoxView WidthRequest="10" HeightRequest="1" Color="{StaticResource TextGray}" />
+									<Label Text="0.50 m" FontSize="13" TextColor="{StaticResource TextGray}" />
+								</HorizontalStackLayout>
+								<HorizontalStackLayout Grid.Row="4" Spacing="6" VerticalOptions="End">
+									<BoxView WidthRequest="10" HeightRequest="1" Color="{StaticResource TextGray}" />
+									<Label Text="0.00 m" FontSize="13" TextColor="{StaticResource TextGray}" />
+								</HorizontalStackLayout>
+							</Grid>
+
+						</HorizontalStackLayout>
+
+					</Grid>
+
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- ===================== TARJETA: NIVEL DE ALERTA ===================== -->
+			<Border BackgroundColor="{StaticResource CardBackground}"
+                    Padding="20"
+                    StrokeShape="RoundRectangle 20"
+                    Stroke="Transparent">
+
+				<VerticalStackLayout Spacing="16">
+
+					<Label Text="NIVEL DE ALERTA"
+                           FontSize="13"
+                           FontAttributes="Bold"
+                           CharacterSpacing="1"
+                           TextColor="{StaticResource TextGray}" />
+
+					<Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="16">
+
+						<Image 
+                               Source="seguridad.png"
+                               x:Name="ImagenEstado"
+                               Grid.Column="0"
+                               WidthRequest="200"
+                               HeightRequest="200"
+                               VerticalOptions="Center"
+                                Aspect="AspectFit">
+                            
+
+                            <!-- Incluir aquí el recurso visual correspondiente (ícono de escudo con check). -->
+						</Image>
+
+						<VerticalStackLayout Grid.Column="1"
+                                             VerticalOptions="Center"
+                                             Spacing="4">
+							<Label x:Name="LblEstadoTitulo"
+                                   Text="SEGURO"
+                                   FontSize="26"
+                                   FontAttributes="Bold"
+                                   TextColor="{StaticResource AlertGreen}" />
+							<Label x:Name="LblEstadoDescripcion"
+                                   Text="El nivel del agua se encuentra en rangos normales."
+                                   FontSize="14"
+                                   TextColor="{StaticResource TextGray}" />
+						</VerticalStackLayout>
+
+						<Grid Grid.Column="2"
+                              RowDefinitions="Auto,Auto,Auto"
+                              ColumnDefinitions="Auto,Auto"
+                              RowSpacing="18"
+                              VerticalOptions="Center">
+
+							<BoxView Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
+                                     WidthRequest="2"
+                                     Color="{StaticResource SeparatorGray}"
+                                     HorizontalOptions="Center" />
+
+							<Ellipse Grid.Row="0" Grid.Column="0"
+                                     Fill="{StaticResource AlertGreen}"
+                                     WidthRequest="14" HeightRequest="14"
+                                     HorizontalOptions="Center" />
+							<Label Grid.Row="0" Grid.Column="1"
+                                   Text="SEGURO"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   Margin="8,0,0,0"
+                                   TextColor="{StaticResource AlertGreen}" />
+
+							<Ellipse Grid.Row="1" Grid.Column="0"
+                                     Fill="{StaticResource AlertYellow}"
+                                     WidthRequest="14" HeightRequest="14"
+                                     HorizontalOptions="Center" />
+							<Label Grid.Row="1" Grid.Column="1"
+                                   Text="RIESGO"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   Margin="8,0,0,0"
+                                   TextColor="{StaticResource AlertYellow}" />
+
+							<Ellipse Grid.Row="2" Grid.Column="0"
+                                     Fill="{StaticResource AlertRed}"
+                                     WidthRequest="14" HeightRequest="14"
+                                     HorizontalOptions="Center" />
+							<Label Grid.Row="2" Grid.Column="1"
+                                   Text="PELIGRO"
+                                   FontAttributes="Bold"
+                                   FontSize="13"
+                                   Margin="8,0,0,0"
+                                   TextColor="{StaticResource AlertRed}" />
+
+						</Grid>
+
+					</Grid>
+
+				</VerticalStackLayout>
+			</Border>
+
+			<!-- ===================== BARRA: SISTEMA ACTIVO ===================== -->
+			<Border BackgroundColor="{StaticResource NotificationBackground}"
+                    Padding="16"
+                    StrokeShape="RoundRectangle 16"
+                    Stroke="Transparent">
+
+				<Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="14">
+
+					<Border Grid.Column="0"
+                            WidthRequest="48"
+                            HeightRequest="48"
+                            StrokeShape="RoundRectangle 24"
+                            Stroke="Transparent"
+                            BackgroundColor="#D9E7FB"
+                            Padding="0">
+						<Image
+                            Source="notificacion.png"
+
+                            x:Name="ImgBell"
+                               WidthRequest="24"
+                               HeightRequest="24"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center">
+							<!-- Incluir aquí el recurso visual correspondiente (ícono de campana). -->
+						</Image>
+					</Border>
+
+					<VerticalStackLayout Grid.Column="1"
+                                         VerticalOptions="Center"
+                                         Spacing="2">
+						<Label Text="Sistema activo"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource TextDarkNavy}" />
+						<Label Text="Te notificaremos ante cualquier cambio de nivel."
+                               FontSize="13"
+                               TextColor="{StaticResource TextGray}" />
+					</VerticalStackLayout>
+
+					<Image 
+                        Source="antena.png"
+                        x:Name="ImgSignalIcon"
+                           Grid.Column="2"
+                           WidthRequest="28"
+                           HeightRequest="28"
+                           VerticalOptions="Center">
+						<!-- Incluir aquí el recurso visual correspondiente (ícono de señal / pulso). -->
+					</Image>
+
+				</Grid>
+			</Border>
+
+		</VerticalStackLayout>
+	</ScrollView>
+
+</ContentPage>
